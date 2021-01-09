@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/OPOS-Zadatak3-Conway-Drugi-Pokusaj/out
+/OPOS-Zadatak3-Conway-Drugi-Pokusaj/outSegmenti
+*.ppm

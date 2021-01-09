@@ -2,9 +2,9 @@
 #include "utilities.h"
 #include <cstdio>
 #include <fstream>
+
 char* readKernelSource(const char* filename)
 {
-	long length;
 	std::fstream kernelFile(filename);
 	std::string content((std::istreambuf_iterator<char>(kernelFile)),std::istreambuf_iterator<char>());
 	char* kernelCharArray = new char[content.size()+1]();//() postavi 0
@@ -12,22 +12,38 @@ char* readKernelSource(const char* filename)
 	return kernelCharArray;
 }
 
-void readImage(const char* filename, unsigned char*& array, int& width, int& height)
+void readImage(const char* filename, Pixel*& array, int& width, int& height)
 {
 	FILE* fp = fopen(filename, "rb"); /* b - binary mode */
-	if (!fscanf(fp, "P5\n%d %d\n255\n", &width, &height)) {
+	char junk[1024] = { 0 };
+	if (!fscanf(fp, "P6\n%*[^\n]\n%d %d\n255\n", &width, &height)) {
 		throw "error";
 	}
-	unsigned char* image = new unsigned char[(size_t)width * height];
-	fread(image, sizeof(unsigned char), (size_t)width * (size_t)height, fp);
+	Pixel* image = new Pixel[(size_t)width * height];
+	fread(image, sizeof(Pixel), (size_t)width * (size_t)height, fp);
 	fclose(fp);
 	array = image;
 }
 
-void writeImage(const char* filename, const unsigned char* array, const int width, const int height)
+void writeImage(const char* filename, const Pixel* array, const int width, const int height)
 {
 	FILE* fp = fopen(filename, "wb"); /* b - binary mode */
-	fprintf(fp, "P5\n%d %d\n255\n", width, height);
-	fwrite(array, sizeof(unsigned char), (size_t)width * (size_t)height, fp);
+	fprintf(fp, "P6\n# Komentar je sad obavezan\n%d %d\n255\n", width, height);
+	fwrite(array, sizeof(Pixel), (size_t)width * (size_t)height, fp);
 	fclose(fp);
+}
+
+std::shared_ptr<std::vector<std::string>> charPtrArrayToVector(char** inputArray, int length)
+{
+	auto result = std::make_shared<std::vector<std::string>>();
+	result->reserve(length);
+	for (int i = 0; i < length; ++i)
+		result->emplace_back(inputArray[i]);
+	return result;
+}
+
+std::pair<int, int> parseIntPair(const std::string& intPair)
+{
+	auto commaIdx = intPair.find_first_of(',');
+	return std::make_pair(std::stoi(intPair.substr(0, commaIdx)), std::stoi(intPair.substr(commaIdx+1)));
 }

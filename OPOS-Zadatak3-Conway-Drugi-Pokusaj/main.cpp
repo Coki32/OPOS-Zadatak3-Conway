@@ -135,15 +135,13 @@ int main(int _argc, char** _argv) {//_ da mi se ne pojavi kad napisem a
 	}
 #pragma endregion
 
-	if (actualArguments.wordy)
-		std::cout << "Ok, radim sa slikom dimenzija [" << imgWidth << ", " << imgHeight << "]" << std::endl;
-
+	std::cout << "Ok, radim sa slikom dimenzija [" << imgWidth << ", " << imgHeight << "]" << std::endl;
 	std::cout << "Ivice se odbacuju. Ako je celija na ivici ziva ostace ziva i samo ce smetati onima okolo" << std::endl;
 
 	if (actualArguments.additionalCells != nullptr)
 		for (auto it = actualArguments.additionalCells->begin(); it != actualArguments.additionalCells->end(); ++it) {
 			auto& [x, y] = *it;
-			if (x<0 || x>imgWidth || y<0 || y>imgHeight)
+			if ((x<0 || x>=imgWidth || y<0 || y>=imgHeight) && actualArguments.wordy)
 				std::cerr << "Ne mogu postaviti piksel na poziciji [" << x << ", " << y << "] jer je van granica slike!" << std::endl;
 			else
 				previous[x * imgWidth + y] = { 255, 255, 255 };
@@ -151,7 +149,7 @@ int main(int _argc, char** _argv) {//_ da mi se ne pojavi kad napisem a
 
 	//napravi folder prije pocetka jer spama tonu slika...
 	std::filesystem::create_directories("./out");
-
+	writeImage("./out/initial.ppm", previous, imgWidth, imgHeight);//nulti korak se kopira
 	for (int i = actualArguments.from; i < actualArguments.to; ++i) {
 		if(actualArguments.wordy)
 			std::cout << "Pokrecem " << i << ". iteraciju igre!" << std::endl;
@@ -286,12 +284,17 @@ Arguments parseArguments(int argc, char** argv) {
 
 	auto upIt = getArgumentIfExists("-up");//upIt upIterator
 	while (upIt != niceArguments->end()) {//
-		auto par = parseIntPair(*upIt);//izvadi ta dva inta, sad treba da ih uklonis iz args, i njih i ono ispred njih
-		niceArguments->erase(upIt - 1, upIt+1);//izgleda da je [First, Last), zato +1
-		if (arguments.additionalCells == nullptr) {
-			arguments.additionalCells = std::make_shared<std::vector<std::pair<int,int>>>();
+		try {
+			auto par = parseIntPair(*upIt);//izvadi ta dva inta, sad treba da ih uklonis iz args, i njih i ono ispred njih
+			if (arguments.additionalCells == nullptr) {
+				arguments.additionalCells = std::make_shared<std::vector<std::pair<int, int>>>();
+			}
+			arguments.additionalCells->push_back(par);
 		}
-		arguments.additionalCells->push_back(par);
+		catch (const std::invalid_argument&) {
+			std::cout << "Vrijednost \"" << *upIt << "\" nije ispravna x,y koordinata!" << std::endl;
+		}
+		niceArguments->erase(upIt - 1, upIt + 1);//izgleda da je [First, Last), zato +1
 		upIt = getArgumentIfExists("-up");
 	}
 	

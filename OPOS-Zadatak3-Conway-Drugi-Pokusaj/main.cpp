@@ -8,9 +8,9 @@
 
 #define _SPAMMER_BUILD 0
 
-const char* const kernelFileName = "GameOfLife.cl";
+const char* const kernelFileName = "GameOfElves.cl";
 
-int globalMaxWorkSize[2] = { 1024,1024 };//default max hardcoded
+size_t globalMaxWorkSize[2] = { 1024,1024 };//default max hardcoded
 
 struct Arguments {
 	int from, to;
@@ -283,6 +283,7 @@ Arguments parseArguments(int argc, char** argv) {
 	}
 
 	auto upIt = getArgumentIfExists("-up");//upIt upIterator
+	//ovdje bih inicijalizovao vektor ali mozda postoji samo jedan -up argument i nije ispravan... neka hvala
 	while (upIt != niceArguments->end()) {//
 		try {
 			auto par = parseIntPair(*upIt);//izvadi ta dva inta, sad treba da ih uklonis iz args, i njih i ono ispred njih

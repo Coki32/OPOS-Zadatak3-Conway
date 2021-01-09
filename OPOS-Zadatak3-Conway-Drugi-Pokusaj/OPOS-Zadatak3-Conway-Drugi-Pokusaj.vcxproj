@@ -153,7 +153,7 @@
     <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GameOfLife.cl" />
+    <None Include="GameOfElves.cl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utilities.h" />

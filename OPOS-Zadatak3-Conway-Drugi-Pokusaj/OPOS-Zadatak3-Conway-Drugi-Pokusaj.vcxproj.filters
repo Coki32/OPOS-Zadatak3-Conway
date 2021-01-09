@@ -23,11 +23,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GameOfLife.cl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GameOfElves.cl" />
   </ItemGroup>
 </Project>

@@ -15,13 +15,13 @@ Redom:
 * Prostor za igru alociran na uredjaju? - Jeste, postoje dva buffera za trenutno i sljedece stanje, smjenjuju se bez oslobadjanja izmedju iteracija. Isto vazi i za memoriju na hostu koja se upisuje u fajl.
 
 ## Argumenti
-Ima ih nekoliko i svi su donekle korisni. Obavezno je navesti ILI (sirinu ILI visinu) ILI ulaznu sliku u `.ppm` formatu iz koje se moze procitati sirina i visina.
+Ima ih nekoliko i svi su donekle korisni. Obavezno je navesti (sirinu ILI visinu) ILI ulaznu sliku u `.ppm` formatu iz koje se moze procitati sirina i visina.
 * `-from <M>` : pokrece simulaciju kao da je vec uradjeno `M` koraka (default 0)
 * `-to <N>` : odredjuje broj koraka simulacije (default 100)
 * `-img <naziv>` : koristi img kao ulaznu sliku
 * `-w <W>` : postavlja sirinu polja (uzajamno iskljucivo za `-img`, `-img` ima veci prioritet)
 * `-h <H>` : postavlja visinu polja (isto kao `-w`, ukoliko nije prisutno za `-h` se koristi `<W>`)
-* `-up x,y` : oznacava da je celija u x-tom redu u y-toj koloni ziva, moze ih se navesti vise. Radi za sliku i za `-w <W>` `-h <H>` fazon. Ako je van opsega i ukljucen je `-wordy` flag spamace malo u konzolu kad naidje na lose koordinate. Ako je ijedna neispravna zatvara se
+* `-up x,y` : oznacava da je celija u x-tom redu u y-toj koloni ziva, moze ih se navesti vise. Radi za sliku i za `-w <W>` `-h <H>` fazon. Ako je van opsega i ukljucen je `-wordy` flag spamace malo u konzolu kad naidje na lose koordinate. Kod neispravnih koordinata tipa `15,osam` ispisuje gresku, a prihvata i koordinate tipa `15x,25y` (ignorise znakove, samo s kraja). Slucaj `15y,25x` ce ipak racunati `15` kao `x`, `25` kao `y`. Za vise zivih celija mora se ponoviti `-up` flag kao npr `-up 15,25 -up 23,30 -up 20,32 -up 13,5`...
 * `-nemamprostora` : Nece cuvati generisane slike u ./out/ folder. Super kad neces 50 slika po 100MB na disku sa 60GB slobodnog prostora.
 * `-ogm <N>` : (skraceno od overrideGlobalMaximum, dugo je) koristi alternativnu maksimalnu (N) velicinu posla. Default je 1024, dohvata se broj sa graficke, ali moze i ovako na silu biti nize. Koristi se NxN zbog 2D posla.
 * `-wordy` : Pored iteracije koju radi takodje ce da spama koje je grupe odradio i koje grupe tek treba da odradi.

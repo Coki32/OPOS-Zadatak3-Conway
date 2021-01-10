@@ -45,6 +45,7 @@ __kernel void GoL_Kill_Pass_Resurrect(__global struct Elf* oldElves, __global st
         else //znaci nit je mrtva nit je ziva, to je neki sareni piksel (od detekcije u proslom koraku) => postavi 0,0,0 (ubij)
             killIt(nextGenElves, width, i, j);
     }
+        barrier(CLK_GLOBAL_MEM_FENCE);
 
     checkOscilators(oldElves, nextGenElves, height, width, i, j);
 }
